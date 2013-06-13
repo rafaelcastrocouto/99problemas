@@ -5,6 +5,6 @@
 
 [Teste](http://rafaelcastrocouto.github.com/99problemas "Current")
 
-[Código](http://github.com/rafaelcastrocouto/99problemas/blob/gh-pages/index.htm "HTML")
+[Código](https://github.com/rafaelcastrocouto/99problemas/blob/gh-pages/index.html "HTML")
 
 autor: rafaelcastrocouto
