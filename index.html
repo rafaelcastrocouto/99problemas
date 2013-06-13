@@ -139,7 +139,6 @@ Array.prototype.toString = function(b){
 
 document.title = '99 problemas';
 s.push('<h1>99 problemas em javascript</h1>');
-s.push('<p>autor: rafaelcastrocouto</p>');
 
 s.push('<dl>');
 for(var name in problems){
@@ -154,8 +153,12 @@ for(var name in problems){
   console.log(solve, problem.solution);
 }
 s.push('</dl>'); 
-s.push('<a href="https://sites.google.com/site/prologsite/prolog-problems/1">Baseado no trabalho de Werner Hett</a>');
 
+s.push('<a href="https://github.com/rafaelcastrocouto/99problemas">Colabore no Github!</a><br>');    
+s.push('<a href="http://rafaelcastrocouto.jsapp.us">Autor: rafaelcastrocouto</a><br>');
+s.push('<a href="https://sites.google.com/site/prologsite/prolog-problems/1">Baseado no trabalho de Werner Hett</a><br>');
+
+    
 document.body.innerHTML = s.join('');
   </script>
 </body>
