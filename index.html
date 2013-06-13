@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+    <style>
+      .y{background: #0d0} 
+      .n{background: red}
+      dd{margin-bottom: 1em}
+    </style>
+  </head>
+<body>
+  <script>
+var problems = {
+  'Problema 01': {
+    description: 'Último elemento em uma lista.',
+    tag: "ultimo",
+    arguments: [['a','b','c','d']],
+    solution: 'd',
+    solve: function(array){ return array[array.length - 1]; },
+  },
+  'Problema 02': {
+    description: 'Penúltimo elemento em uma lista.',
+    tag: "penultimo",
+    arguments: [['a','b','c','d']],
+    solution: 'c',
+    solve: function(array){ return array[array.length - 2]; },
+  },
+  'Problema 03': {
+    description: 'Elemento N em uma lista.',
+    tag: "itemN",
+    arguments: [2, ['a','b','c','d']],
+    solution: 'b',
+    solve: function(N, array){ return array[N - 1]; },
+  },
+  'Problema 04': {
+    description: 'Número de elementos em uma lista.',
+    tag: "tamanho",
+    arguments: [['a','b','c','d']],
+    solution: 4,
+    solve: function(array){ return array.length; },
+  },
+  'Problema 05': {
+    description: 'Inverter uma lista.',
+    tag: "inverte",
+    arguments: [['a','b','c','d']],
+    solution: ['d','c','b','a'],
+    solve: function(array){ return array.reverse(); },
+  },
+  'Problema 06': {
+    description: 'Verificar se uma lista é um palíndromo.',
+    tag: "palindromo",
+    arguments: [['a','b','c','b','a']],
+    solution: true,
+    solve: function(array){ 
+      for(var c = 0; c < Math.floor(array.length/2); ++c){
+        if(array[c] != array[array.length - 1 - c]) return false;
+      }
+      return true; 
+    },
+  },
+  'Problema 07': {
+    description: 'Planificar uma série de listas recursivamente.',
+    tag: "planifica",
+    arguments: [['a',['b',['c','d'],'e']]],
+    solution: ['a','b','c','d','e'],
+    solve: function(array){ 
+      var r = [];
+      var f = function(a){
+        for(var c = 0; c < a.length; ++c){
+          if(a[c].constructor.name == 'Array') f(a[c]);
+          else r.push(a[c])
+        }
+      }
+      f(array);
+      return r; 
+    },
+  },
+  'Problema 08': {
+    description: 'Eliminar itens duplicados em uma lista.',
+    tag: "limpa",
+    arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
+    solution: ['a','b','c','a','d','e'],
+    solve: function(array){ 
+      var r = [array[0]];
+      for(var c = 1; c < array.length; ++c){
+        if(array[c] != r[r.length - 1]) r.push(array[c]);
+      }
+      return r; 
+    },
+  },
+  'Problema 09': {
+    description: 'Agrupar itens duplicados em uma lista.',
+    tag: "agrupa",
+    arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
+    solution: [['a','a','a','a'],['b'],['c','c'],['a','a'],['d'],['e','e','e','e']],
+    solve: function(array){ 
+      var r = [[array[0]]];
+      for(var c = 1; c < array.length; ++c){
+        var u = r[r.length - 1],
+            i = array[c];
+        if(i == u[u.length - 1]) 
+          r[r.length - 1].push(i);
+        else r.push([i]);
+      }
+      return r;
+    },
+  },
+  'Problema 10': {
+    description: 'Numerar e comprimir itens duplicados em uma lista (Run-Length Encoding).',
+    tag: "rle",
+    arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
+    solution: [[4,'a'],[1,'b'],[2,'c'],[2,'a'],[1,'d'],[4,'e']],
+    solve: function(array){ 
+      var r = [[1,array[0]]];
+      for(var c = 1; c < array.length; ++c){
+        var u = r[r.length - 1],
+            i = array[c];
+        if(i == u[1]) 
+          r[r.length - 1][0]++;
+        else r.push([1, i]);
+      }
+      return r;
+    },
+  }
+},
+    
+y = '<span class="y">Sim</span>',
+n = '<span class="n">Não</span>',
+s = [];
+
+Array.prototype.toString = function(b){
+  var s = [];
+  for(var i = 0; i < this.length; ++i){
+    s.push("'" + this[i] + "'");
+  }
+  if(b == 'noBrackets') return s.join(',');
+  return '[' + s.join(',') + ']';
+}
+
+document.title = '99 problemas';
+s.push('<h1>99 problemas em javascript</h1>');
+s.push('<p>autor: rafaelcastrocouto</p>');
+
+s.push('<dl>');
+for(var name in problems){
+  var problem = problems[name];
+  s.push('<dt><b>'+ name +': </b>'+ problem.description +'</dt><dd>');
+  s.push('Exemplo: '+ problem.tag +'(' + problem.arguments.toString('noBrackets') + ');<br>');
+  s.push('Solução: ' + problem.solution + '<br>');
+  s.push(problem.solve + '<br>');
+  var solve = problem.solve.apply(this, problem.arguments);
+  var test = (solve.toString() == problem.solution.toString());
+  s.push('Funciona: ' + solve +' '+ (test ? y : n) +'</dd>');
+  console.log(solve, problem.solution);
+}
+s.push('</dl>'); 
+s.push('<a href="https://sites.google.com/site/prologsite/prolog-problems/1">Baseado no trabalho de Werner Hett</a>');
+
+document.body.innerHTML = s.join('');
+  </script>
+</body>
+</html>
