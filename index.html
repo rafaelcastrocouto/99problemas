@@ -3,7 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
     <style>
-      .y{background: #0d0} 
+      .m{font-family: monospace}
+      .a{background: #ddd}
+      .y{background: green} 
       .n{background: red}
       dd{margin-bottom: 1em}
     </style>
@@ -113,11 +115,45 @@ var problems = {
     solve: function(array){ 
       var r = [[1,array[0]]];
       for(var c = 1; c < array.length; ++c){
-        var u = r[r.length - 1],
-            i = array[c];
-        if(i == u[1]) 
-          r[r.length - 1][0]++;
-        else r.push([1, i]);
+        var u = r.length - 1;
+        if(array[c] == r[u][1]) 
+          r[u][0]++;
+        else r.push([1, array[c]]);
+      }
+      return r;
+    },
+  },
+  'Problema 11': {
+    description: 'Numerar e comprimir itens duplicados em uma lista (Run-Length Encoding) mantendo itens únicos inalterados.',
+    tag: "rles",
+    arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
+    solution: [[4,'a'],'b',[2,'c'],[2,'a'],'d',[4,'e']],
+    solve: function(array){ 
+      var r = [array[0]];
+      for(var c = 1; c < array.length; ++c){
+        var u = r.length - 1;
+        if(array[c] == r[u] || array[c] == r[u][1]){ 
+          if(!r[u][1]) r[u] = [2, r[u]];
+          else r[u][0]++;
+        } else r.push(array[c]);
+      }
+      return r;
+    },
+  },
+  'Problema 12': {
+    description: 'Inverter o processo anterior (Run-Length Decoding).',
+    tag: "rles",
+    arguments: [[[4,'a'],'b',[2,'c'],[2,'a'],'d',[4,'e']]],
+    solution: ['a','a','a','a','b','c','c','a','a','d','e','e','e','e'],
+    solve: function(array){ 
+      var r = [];
+      for(var c = 0; c < array.length; ++c){
+        var u = r.length - 1;
+        if(array[c][1]){
+          for(var i = 0; i < array[c][0]; ++i){
+            r.push(array[c][1]);
+          }
+        } else r.push(array[c]);
       }
       return r;
     },
@@ -146,11 +182,11 @@ for(var name in problems){
   s.push('<dt><b>'+ name +': </b>'+ problem.description +'</dt><dd>');
   s.push('Exemplo: '+ problem.tag +'(' + problem.arguments.toString('noBrackets') + ');<br>');
   s.push('Solução: ' + problem.solution + '<br>');
-  s.push(problem.solve + '<br>');
+  s.push('<span class="m"> ' + problem.solve + '</span><br>');
   var solve = problem.solve.apply(this, problem.arguments);
   var test = (solve.toString() == problem.solution.toString());
-  s.push('Funciona: ' + solve +' '+ (test ? y : n) +'</dd>');
-  console.log(solve, problem.solution);
+  s.push('Funciona: <span class="a">' + solve +'</span> '+ (test ? y : n) +'</dd>');
+  //console.log(solve, problem.solution);
 }
 s.push('</dl>'); 
 
