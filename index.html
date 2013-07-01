@@ -3,8 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
     <style>
-      .m{font-family: monospace}
+      .mono{font-family: monospace}
       .a{background: #ddd}
+      .m{background: yellow}
       .y{background: green} 
       .n{background: red}
       dd{margin-bottom: 1em}
@@ -18,35 +19,35 @@ var problems = {
     tag: "ultimo",
     arguments: [['a','b','c','d']],
     solution: 'd',
-    solve: function(array){ return array[array.length - 1]; },
+    solve: function(array){ return array[array.length - 1]; }
   },
   'Problema 02': {
     description: 'Penúltimo elemento em uma lista.',
     tag: "penultimo",
     arguments: [['a','b','c','d']],
     solution: 'c',
-    solve: function(array){ return array[array.length - 2]; },
+    solve: function(array){ return array[array.length - 2]; }
   },
   'Problema 03': {
     description: 'Elemento N em uma lista.',
     tag: "itemN",
     arguments: [2, ['a','b','c','d']],
     solution: 'b',
-    solve: function(N, array){ return array[N - 1]; },
+    solve: function(N, array){ return array[N - 1]; }
   },
   'Problema 04': {
     description: 'Número de elementos em uma lista.',
     tag: "tamanho",
     arguments: [['a','b','c','d']],
     solution: 4,
-    solve: function(array){ return array.length; },
+    solve: function(array){ return array.length; }
   },
   'Problema 05': {
     description: 'Inverter uma lista.',
     tag: "inverte",
     arguments: [['a','b','c','d']],
     solution: ['d','c','b','a'],
-    solve: function(array){ return array.reverse(); },
+    solve: function(array){ return array.reverse(); }
   },
   'Problema 06': {
     description: 'Verificar se uma lista é um palíndromo.',
@@ -58,7 +59,7 @@ var problems = {
         if(array[c] != array[array.length - 1 - c]) return false;
       }
       return true; 
-    },
+    }
   },
   'Problema 07': {
     description: 'Planificar uma série de listas recursivamente.',
@@ -75,7 +76,7 @@ var problems = {
       }
       f(array);
       return r; 
-    },
+    }
   },
   'Problema 08': {
     description: 'Eliminar itens duplicados em uma lista.',
@@ -88,7 +89,7 @@ var problems = {
         if(array[c] != r[r.length - 1]) r.push(array[c]);
       }
       return r; 
-    },
+    }
   },
   'Problema 09': {
     description: 'Agrupar itens duplicados em uma lista.',
@@ -105,11 +106,11 @@ var problems = {
         else r.push([i]);
       }
       return r;
-    },
+    }
   },
   'Problema 10': {
     description: 'Numerar e comprimir itens duplicados em uma lista (Run-Length Encoding).',
-    tag: "rle",
+    tag: "encode",
     arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
     solution: [[4,'a'],[1,'b'],[2,'c'],[2,'a'],[1,'d'],[4,'e']],
     solve: function(array){ 
@@ -121,28 +122,29 @@ var problems = {
         else r.push([1, array[c]]);
       }
       return r;
-    },
+    }
   },
   'Problema 11': {
     description: 'Numerar e comprimir itens duplicados em uma lista (Run-Length Encoding) mantendo itens únicos inalterados.',
-    tag: "rles",
+    tag: "encode_mod",
     arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
     solution: [[4,'a'],'b',[2,'c'],[2,'a'],'d',[4,'e']],
     solve: function(array){ 
-      var r = [array[0]];
+      var p = array[0], r = [p];
       for(var c = 1; c < array.length; ++c){
         var u = r.length - 1;
-        if(array[c] == r[u] || array[c] == r[u][1]){ 
+        if(array[c] == p){ 
           if(!r[u][1]) r[u] = [2, r[u]];
           else r[u][0]++;
         } else r.push(array[c]);
+        p = array[c];
       }
       return r;
-    },
+    }
   },
   'Problema 12': {
     description: 'Inverter o processo anterior (Run-Length Decoding).',
-    tag: "rles",
+    tag: "decode",
     arguments: [[[4,'a'],'b',[2,'c'],[2,'a'],'d',[4,'e']]],
     solution: ['a','a','a','a','b','c','c','a','a','d','e','e','e','e'],
     solve: function(array){ 
@@ -156,21 +158,209 @@ var problems = {
         } else r.push(array[c]);
       }
       return r;
+    }
+  },
+  'Problema 13': {
+    description: 'Numerar e comprimir itens duplicados em uma lista diretamente(Run-Length Encoding).',
+    tag: "encode_dir",
+    arguments: [['a','a','a','a','b','c','c','a','a','d','e','e','e','e']],
+    solution: [[4,'a'],'b',[2,'c'],[2,'a'],'d',[4,'e']],
+    solve: function(array){ 
+      var ma = array.join('').match(/(.)\1*/g), r = [];
+      for(var c = 0; c < ma.length; ++c){
+        if(ma[c].length > 1) r.push([ma[c].length, ma[c][0]]);
+        else r.push(ma[c][0]);
+      }
+      return r;
+    }
+  },
+  'Problema 14': {
+    description: 'Duplicar os itens em uma lista.',
+    tag: "duplica",
+    arguments: [['a','b','c','c','d']],
+    solution: ['a','a','b','b','c','c','c','c','d','d'],
+    solve: function(array){ 
+      var r = [];
+      for(var c = 0; c < array.length; ++c){
+        r.push(array[c], array[c]);
+      }
+      return r;
+    }
+  },
+  'Problema 15': {
+    description: 'Multiplicar os itens em uma lista N vezes.',
+    tag: "multiplica",
+    arguments: [['a','b','c'], 3],
+    solution: ['a','a','a','b','b','b','c','c','c'],
+    solve: function(array, n){ 
+      var r = [];
+      for(var c = 0; c < array.length; ++c){
+        for(var d = 0; d < n; ++d){
+          r.push(array[c]);
+        }
+      }
+      return r;
+    }
+  },
+  'Problema 16': {
+    description: 'Remover um item a cada N itens.',
+    tag: "remove",
+    arguments: [['a','b','c','d','e','f','g','h','i','j'], 3],
+    solution: ['a','b','d','e','g','h','j'],
+    solve: function(array, n){ 
+      var r = [];
+      for(var c = 0; c < array.length; ++c){
+        if((c+1) % n != 0) r.push(array[c]);
+      }
+      return r;
+    }
+  },
+  'Problema 17': {
+    description: 'Dividir uma lista dado item N onde será feita a divisão.',
+    tag: "divide_em_N",
+    arguments: [['a','b','c','d','e','f','g','h','i','j'], 3],
+    solution: [['a','b','c'],['d','e','f','g','h','i','j']],
+    solve: function(array, n){ 
+      var r = array.slice(0, n),
+          s = array.slice(n, array.length);
+      return [r, s];
+    }
+  },
+  'Problema 18': {
+    description: 'Recortar uma lista dados os items N e M onde será o início e o fim da divisão.',
+    tag: "recorta",
+    arguments: [['a','b','c','d','e','f','g','h','i','j'], 3, 7],
+    solution: ['c','d','e','f','g'],
+    solve: function(array, n, m){ 
+      return array.slice(n - 1, m);
     },
+  },
+  'Problema 19': {
+    description: 'Rodar os itens em uma lista N vezes.',
+    tag: "roda_N",
+    arguments: [['a','b','c','d','e','f','g','h'], 3],
+    solution: ['d','e','f','g','h','a','b','c'],
+    solve: function(array, n){ 
+      var r = array.slice(0, n),
+          s = array.slice(n, array.length);
+      return s.concat(r);
+    }
+  },
+  'Problema 20': {
+    description: 'Remover o item N em uma lista e retornar o item.',
+    tag: "remove_N",
+    arguments: [['a','b','c','d'], 3],
+    solution: [['a','b','d'],'c'],
+    solve: function(array, n){ 
+      var r = array.slice();
+      r.splice(n - 1, 1);
+      return [r, array[n - 1]];
+    }
+  },
+  'Problema 21': {
+    description: 'Inserir um item na posição N em uma lista.',
+    tag: "insere_N",
+    arguments: ['i',['a','b','c','d'], 3],
+    solution: ['a','b','i','c','d'],
+    solve: function(i, array, n){ 
+      var r = [];
+      for(var c = 0; c < array.length; ++c){
+        if(c == (n - 1)) r.push(i);
+        r.push(array[c]);
+      }
+      return r;
+    }
+  },
+  'Problema 22': {
+    description: 'Criar uma lista com inteiros consecutivos.',
+    tag: "cria",
+    arguments: [3, 8],
+    solution: [3,4,5,6,7,8],
+    solve: function(i, f){ 
+      var r = [];
+      for(var c = i; c <= f; ++c){
+        r.push(c);
+      }
+      return r;
+    }
+  },
+  'Problema 23': {
+    description: 'Extrair N itens aleatórios de uma lista.',
+    tag: "ex_random_N",
+    arguments: [['a','b','c','d','e'], 3],
+    solution: ['b','d','e'],
+    maybe: true,
+    solve: function(array, n){ 
+      var r = [], na = array.slice();
+      for(var c = 0; c < n; ++c){
+        r.push(na.splice(Math.floor(Math.random()*na.length), 1)[0]);
+      }
+      return r;
+    }
+  },
+  'Problema 24': {
+    description: 'Criar uma lista com inteiros aleatórios com valor máximo determinado.',
+    tag: "max_random",
+    arguments: [6, 20],
+    solution: [3,13,2,19,15,7],
+    maybe: true,
+    solve: function(n, max){ 
+      var r = [];
+      for(var c = 0; c < n; ++c){
+        r.push(Math.floor(Math.random()*max));
+      }
+      return r;
+    }
+  },
+  'Problema 25': {
+    description: 'Permutar aleatóriamente os itens de uma lista.',
+    tag: "permuta",
+    arguments: [['a','b','c','d','e']],
+    solution: ['b','e','a','c','d'],
+    maybe: true,
+    solve: function(array){ 
+      var r = [], na = array.slice();
+      for(var c = 0; c < array.length; ++c){
+        r.push(na.splice(Math.floor(Math.random()*na.length), 1)[0]);
+      }
+      return r;
+    }
+  },
+  'Problema 26': {
+    description: 'Gerar todas as combinações possíveis de N itens em uma lista .',
+    tag: "permuta",
+    arguments: [3, ['a','b','c','d','e']],
+    solution: [['a','b','c'],['a','b','d'],['a','b','e'],['a','c','d'],['a','c','e'],['a','d','e'],['b','c','d'],['b','c','e'],['b','d','e'],['c','d','e']],
+    solve: function(n, array){ 
+      f = function (n, array){
+        var r = [], sub, next;
+        for(var i = 0; i < array.length; i++){
+          if(n == 1){
+            r.push([array[i]]);
+          }else{
+            sub = f(n - 1, array.slice(i + 1, array.length));
+            for(var j = 0; j < sub.length; j++){
+              next = sub[j];
+              next.unshift(array[i]);
+              r.push(next);
+            }
+          }
+        }
+        return r;
+      }
+      return f(n, array);
+    }
   }
 },
     
 y = '<span class="y">Sim</span>',
 n = '<span class="n">Não</span>',
+m = '<span class="m">Talvez</span>',
 s = [];
 
 Array.prototype.toString = function(b){
-  var s = [];
-  for(var i = 0; i < this.length; ++i){
-    s.push("'" + this[i] + "'");
-  }
-  if(b == 'noBrackets') return s.join(',');
-  return '[' + s.join(',') + ']';
+  if(b == 'noBrackets') return this.join(',');
+  return '[' + this.join(',') + ']';
 }
 
 document.title = '99 problemas';
@@ -182,10 +372,11 @@ for(var name in problems){
   s.push('<dt><b>'+ name +': </b>'+ problem.description +'</dt><dd>');
   s.push('Exemplo: '+ problem.tag +'(' + problem.arguments.toString('noBrackets') + ');<br>');
   s.push('Solução: ' + problem.solution + '<br>');
-  s.push('<span class="m"> ' + problem.solve + '</span><br>');
+  s.push('<span class="mono"> ' + problem.solve + '</span><br>');
   var solve = problem.solve.apply(this, problem.arguments);
   var test = (solve.toString() == problem.solution.toString());
-  s.push('Funciona: <span class="a">' + solve +'</span> '+ (test ? y : n) +'</dd>');
+  var color = (problem.maybe ? m : (test ? y : n));
+  s.push('Funciona: <span class="a">' + solve +'</span> '+ color +'</dd>');
   //console.log(solve, problem.solution);
 }
 s.push('</dl>'); 
