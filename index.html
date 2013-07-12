@@ -327,12 +327,12 @@ var problems = {
     }
   },
   'Problema 26': {
-    description: 'Gerar todas as combinações possíveis de N itens em uma lista .',
+    description: 'Gerar todas as combinações possíveis de N itens em uma lista.',
     tag: "permuta",
     arguments: [3, ['a','b','c','d','e']],
     solution: [['a','b','c'],['a','b','d'],['a','b','e'],['a','c','d'],['a','c','e'],['a','d','e'],['b','c','d'],['b','c','e'],['b','d','e'],['c','d','e']],
     solve: function(n, array){ 
-      f = function (n, array){
+      var f = function (n, array){
         var r = [], sub, next;
         for(var i = 0; i < array.length; i++){
           if(n == 1){
@@ -347,10 +347,100 @@ var problems = {
           }
         }
         return r;
-      }
+      };
       return f(n, array);
     }
-  }
+  },
+  'Problema 27': {
+    description: 'Criar todos subgrupos possíveis de elemetos dada uma lista com o número de elementos em cada subgrupo.',
+    tag: "subgrupos",
+    arguments: [['a','b','c','d','e'], [2/* , 3  */]],
+    solution: [[['a','b'],['c','d','e']],
+               [['a','c'],['b','d','e']],
+               [['a','d'],['b','c','e']],
+               [['a','e'],['b','c','d']],
+               [['b','c'],['a','d','e']],
+               [['b','d'],['a','c','e']],
+               [['b','e'],['a','c','d']],
+               [['c','d'],['a','b','e']],
+               [['c','e'],['a','b','d']],
+               [['d','e'],['a','b','c']]],
+    solve: function(array, n_array){ 
+      var subgroup = [], groups = [], n = 0, indices, options, division, divisions, remaining,
+      pick = function (list, items) {
+        var selected = [], rest = [];
+        for (var i = 0; i < list.length; i++) {
+          if (items.indexOf(i) < 0) rest.push(list[i]);
+          else selected.push(list[i]);
+        }
+        return [selected, rest];
+      },
+      getIndices = function (length) {
+        var ind = [];
+        for (var i = 0; i < length; i++)
+          ind.push(i);
+        return ind;
+      },
+      select = function (index) {
+        subgroup.push(index);
+        if (++n < division) {
+          var ind = indices.slice(index + 1);
+          for(var i = 0; i < ind.length; ++i) select(ind[i]);
+        } else {
+          var subgroups = pick(options, subgroup);
+          if (remaining) {
+            var children = group(subgroups.pop(), divisions.slice());
+            var length = children.length;
+            for (var i = 0; i < length; i++) groups.push(subgroups.concat(children[i]));
+          } else groups.push(subgroups);
+        }
+        subgroup.pop();
+        n--;
+      },
+      group = function (opt, divs) {
+        options = opt;
+        divisions = divs;
+        subgroup = []; 
+        groups = []; 
+        n = 0;
+        indices = getIndices(options.length);
+        division = divisions.shift(); 
+        remaining = divisions.length;
+        for(var i = 0; i < indices.length; ++i) select(indices[i]);
+        return groups;
+      };
+      return group(array, n_array);
+    }
+  },
+  'Problema 28': {
+    description: 'Ordenar uma lista de acordo com a frequência do tamanho das sublistas (ordem de raridade dos tamanhos).',
+    tag: "ordenaRaridade",
+    arguments: [[['a','b','c'],['d','e'],['f','g','h'],['d','e'],['i','j','k','l'],['m','n'],['o']]],
+    solution: [['i','j','k','l'],['o'],['a','b','c'],['f','g','h'],['d','e'],['d','e'],['m','n']],
+    solve: function(array){ 
+      var r = [], s = [];
+      for(var i = 0; i < array.length; ++i){
+        if(r[array[i].length]){
+          r[array[i].length][0]++;
+          r[array[i].length].push(array[i]);
+        } else {
+          r[array[i].length] = [1];
+          r[array[i].length].push(array[i]);
+        }
+      }
+      r.sort(function(a,b){
+        return a[0] - b[0];
+      });
+      for(var i = 0; i < r.length; ++i){
+        if(r[i]){
+          for(var j = 1; j < r[i].length; ++j){
+            s.push(r[i][j]);
+          }
+        }
+      }
+      return s;
+    }
+  },  
 },
     
 y = '<span class="y">Sim</span>',
@@ -365,18 +455,18 @@ Array.prototype.toString = function(b){
 
 document.title = '99 problemas';
 s.push('<h1>99 problemas em javascript</h1>');
-
+s.push('<h3>por rafaelcastrocouto</h3>');
 s.push('<dl>');
 for(var name in problems){
   var problem = problems[name];
-  s.push('<dt><b>'+ name +': </b>'+ problem.description +'</dt><dd>');
-  s.push('Exemplo: '+ problem.tag +'(' + problem.arguments.toString('noBrackets') + ');<br>');
-  s.push('Solução: ' + problem.solution + '<br>');
-  s.push('<span class="mono"> ' + problem.solve + '</span><br>');
+  s.push('<dt><b id="'+ name +'">'+ name +': </b>'+ problem.description +'</dt><dd>');
+  s.push('Exemplo: '+ problem.tag +'('+ problem.arguments.toString('noBrackets') +');<br>');
+  s.push('Solução: '+ problem.solution +'<br>');
+  s.push('<span class="mono"> '+ problem.solve +'</span><br>');
   var solve = problem.solve.apply(this, problem.arguments);
   var test = (solve.toString() == problem.solution.toString());
   var color = (problem.maybe ? m : (test ? y : n));
-  s.push('Funciona: <span class="a">' + solve +'</span> '+ color +'</dd>');
+  s.push('Funciona: <span class="a">'+ solve +'</span> '+ color +'</dd>');
   //console.log(solve, problem.solution);
 }
 s.push('</dl>'); 
