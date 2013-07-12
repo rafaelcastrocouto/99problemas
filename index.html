@@ -3,12 +3,31 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
     <style>
-      .mono{font-family: monospace}
+      *{
+        font-family: 'Lucida Sans', sans-serif;
+      }
+      textarea{
+        display: block;
+        font-family: monospace; 
+        width: 600px;
+        background: #334;
+        color: white;
+        margin: 0.2em
+      }
       .a{background: #ddd}
       .m{background: yellow}
       .y{background: green} 
       .n{background: red}
-      dd{margin-bottom: 1em}
+      .m, .y, .n {
+        padding: 0.2em;
+        border-radius: 0.2em
+      }
+      dd{margin-bottom: 2em}
+      p{margin: 0.2em}
+      h3{
+        margin-left: 2em; 
+        margin-bottom: 3em
+      }
     </style>
   </head>
 <body>
@@ -47,7 +66,7 @@ var problems = {
     tag: "inverte",
     arguments: [['a','b','c','d']],
     solution: ['d','c','b','a'],
-    solve: function(array){ return array.reverse(); }
+    solve: function(array){ var r = []; r = array.slice(); return r.reverse(); }
   },
   'Problema 06': {
     description: 'Verificar se uma lista é um palíndromo.',
@@ -399,7 +418,7 @@ var problems = {
       },
       group = function (opt, divs) {
         options = opt;
-        divisions = divs;
+        divisions = divs.slice();
         subgroup = []; 
         groups = []; 
         n = 0;
@@ -442,41 +461,64 @@ var problems = {
     }
   },  
 },
-    
+//COLORS
 y = '<span class="y">Sim</span>',
 n = '<span class="n">Não</span>',
 m = '<span class="m">Talvez</span>',
 s = [];
-
+//NO BRACKET ARRAY.TOSTRING
 Array.prototype.toString = function(b){
   if(b == 'noBrackets') return this.join(',');
   return '[' + this.join(',') + ']';
 }
-
+//PRINT
 document.title = '99 problemas';
 s.push('<h1>99 problemas em javascript</h1>');
 s.push('<h3>por rafaelcastrocouto</h3>');
+//PRINT EACH PROBLEM
 s.push('<dl>');
 for(var name in problems){
   var problem = problems[name];
-  s.push('<dt><b id="'+ name +'">'+ name +': </b>'+ problem.description +'</dt><dd>');
-  s.push('Exemplo: '+ problem.tag +'('+ problem.arguments.toString('noBrackets') +');<br>');
-  s.push('Solução: '+ problem.solution +'<br>');
-  s.push('<span class="mono"> '+ problem.solve +'</span><br>');
-  var solve = problem.solve.apply(this, problem.arguments);
-  var test = (solve.toString() == problem.solution.toString());
-  var color = (problem.maybe ? m : (test ? y : n));
-  s.push('Funciona: <span class="a">'+ solve +'</span> '+ color +'</dd>');
+  s.push('<dt id="'+ name +'"><b>'+ name +': </b>'+ problem.description +'</dt><dd>');
+  s.push('<p>Exemplo: '+ problem.tag +'('+ problem.arguments.toString('noBrackets') +');</p>');
+  s.push('<p>Solução: '+ problem.solution +'</p>');
+  s.push('<textarea> '+ problem.solve +'</textarea>');
+  s.push('<button>Testar</button>');
+  var solve = problem.solve.apply(this, problem.arguments),
+      test = (solve.toString() == problem.solution.toString()),
+     color = (problem.maybe ? m : (test ? y : n));
+  s.push('<span>Funciona: <span class="a">'+ solve +'</span> '+ color +'</span></dd>');
   //console.log(solve, problem.solution);
 }
 s.push('</dl>'); 
-
+//FOOTER
 s.push('<a href="https://github.com/rafaelcastrocouto/99problemas">Colabore no Github!</a><br>');    
 s.push('<a href="http://rafaelcastrocouto.jsapp.us">Autor: rafaelcastrocouto</a><br>');
 s.push('<a href="https://sites.google.com/site/prologsite/prolog-problems/1">Baseado no trabalho de Werner Hett</a><br>');
-
-    
+//WRITE TO DOCUMENT
 document.body.innerHTML = s.join('');
+//ADJUST TEXTAREA HEIGHT
+var ta = document.getElementsByTagName('textarea');
+for(var i = 0; i < ta.length; ++i){
+  ta[i].style.height = (ta[i].scrollHeight)+"px";
+}
+//BUTTONS EVENTS
+var buttonClick = function(){
+  var name = this.parentNode.previousElementSibling.id,
+      problem = problems[name],
+      last = this.nextElementSibling;
+  try{
+    eval('var f = ' + this.previousElementSibling.value);
+    var solve = f.apply(this, problem.arguments),
+        test = (solve.toString() == problem.solution.toString()),
+        color = (problem.maybe ? m : (test ? y : n));
+  } catch(e) { last.innerHTML = '<span class="n">Error:</span> ' + e; return false;}
+  last.innerHTML = '<span>Funciona: <span class="a">'+ solve +'</span> '+ color +'</span>';
+};
+var bu = document.getElementsByTagName('button');
+for(var i = 0; i < ta.length; ++i){
+  bu[i].addEventListener('click', buttonClick)
+}
   </script>
 </body>
 </html>
