@@ -77,8 +77,19 @@
       .y{background: yellowgreen} 
       .n{background: tomato}
       .m, .y, .n, .a {
-        padding: 0.2em 0.4em;
+        padding: 0 0.4em;
         border-radius: 0.2em
+      }
+      .footer {
+        border-top: 1px solid #F0DB4F;
+        padding: 0.4em
+      }
+      .footer p {
+        max-width: 600px;
+        margin: 0 auto
+      }
+      .footer a {
+        margin: 0 1em
       }
     </style>
   </head>
@@ -527,8 +538,7 @@ Array.prototype.toString = function(b){
 document.title = '99 problemas';
 s.push('<div class="header">');
 s.push('<h1>99 problemas em javascript</h1>');
-s.push('<p>These are JavaScript translation of famous functional programming series Ninety-Nine problems already done in <a href="https://wiki.haskell.org/H-99:_Ninety-Nine_Haskell_Problems" target="_blank">Haskell</a>, <a href="http://www.ic.unicamp.br/~meidanis/courses/mc336/2006s2/funcional/L-99_Ninety-Nine_Lisp_Problems.html" target="_blank">List</a>, <a href="https://sites.google.com/site/prologsite/prolog-problems">Prolog</a> and <a href="http://aperiodic.net/phil/scala/s-99/">Scala</a>.');
-s.push('<p><a href="http://rafaelcastrocouto.jsapp.us">Autor: rafaelcastrocouto</a></p>');
+s.push('<p>Esse é um conjunto de soluções válidas para os 99 problemas de Werner Hett em Javascript, já solucionados em <a href="https://wiki.haskell.org/H-99:_Ninety-Nine_Haskell_Problems" target="_blank">Haskell</a>, <a href="http://www.ic.unicamp.br/~meidanis/courses/mc336/2006s2/funcional/L-99_Ninety-Nine_Lisp_Problems.html" target="_blank">List</a>, <a href="https://sites.google.com/site/prologsite/prolog-problems">Prolog</a> e <a href="http://aperiodic.net/phil/scala/s-99/">Scala</a>.');
 s.push('<p><a href="https://sites.google.com/site/prologsite/prolog-problems/1">Baseado no trabalho de Werner Hett</a></p>');
 s.push('<p><a href="https://github.com/rafaelcastrocouto/99problemas">Colabore no Github!</a></p>');    
 s.push('</div>');
@@ -555,13 +565,15 @@ for(var name in problems){
 }
 s.push('</div>'); 
 //FOOTER
+s.push('<div class="footer"><p><a href="http://rafaelcastrocouto.jsapp.us">Autor: rafaelcastrocouto</a><a href="https://github.com/rafaelcastrocouto/99problemas">Colabore no Github!</a></p></div>');
 //WRITE TO DOCUMENT
 document.body.innerHTML = s.join('');
 //ADJUST TEXTAREA HEIGHT
 var ta = document.getElementsByTagName('textarea');
-for(var i = 0; i < ta.length; ++i){
-  ta[i].style.height = (ta[i].scrollHeight)+"px";
-}
+[].forEach.call(document.getElementsByTagName('textarea'), 
+function(textarea){
+  textarea.style.height = (textarea.scrollHeight) + "px";
+});
 //BUTTONS EVENTS
 var buttonClick = function(){
   var name = this.parentNode.previousElementSibling.id,
@@ -575,10 +587,10 @@ var buttonClick = function(){
   } catch(e) { last.innerHTML = '<span class="n">Erro:</span> ' + e; return false;}
   last.innerHTML = '<p>Resultado: <span class="a">'+ solve +'</span></p>';
 };
-var bu = document.getElementsByTagName('button');
-for(var i = 0; i < ta.length; ++i){
-  bu[i].addEventListener('click', buttonClick)
-}
+[].forEach.call(document.getElementsByTagName('button'), 
+function(button){
+  button.addEventListener('click', buttonClick);
+});
   </script>
 </body>
 </html>
