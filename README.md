@@ -1,12 +1,12 @@
-# 99problemas
+# 99 problemas em javascript
+
 ============
 
-99 problemas em javascript.
 
-[Teste](http://rafaelcastrocouto.github.com/99problemas "Current")
+Baseado no trabalho de [Werner Hett](https://sites.google.com/site/prologsite/prolog-problems/1)
 
-[Código](https://github.com/rafaelcastrocouto/99problemas/blob/gh-pages/index.html "HTML")
+[Demostração](http://rafaelcastrocouto.github.com/99problemas "Current")
 
 [English](http://leonardiwagner.github.io/js-99)
 
-autor: rafaelcastrocouto
+Autor: rafaelcastrocouto
